@@ -98,7 +98,7 @@ class BrowserManager:
                 "slow_mo": self.slow_mo,
                 "viewport": self.viewport,
                 **self.launch_options,
-                "locale": "en-US",
+                "locale": os.environ.get("LINKEDIN_LOCALE", "en-US"),
             }
 
             if self.user_agent:
