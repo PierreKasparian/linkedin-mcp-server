@@ -397,6 +397,29 @@ class TestExtractPage:
 
 
 class TestNavigationDiagnostics:
+    async def test_goto_with_auth_checks_uses_page_default_timeout(self, mock_page):
+        extractor = LinkedInExtractor(mock_page)
+
+        with (
+            patch(
+                "linkedin_mcp_server.scraping.extractor.resolve_remember_me_prompt",
+                new_callable=AsyncMock,
+                return_value=False,
+            ),
+            patch(
+                "linkedin_mcp_server.scraping.extractor.detect_auth_barrier_quick",
+                new_callable=AsyncMock,
+                return_value=None,
+            ),
+        ):
+            await extractor._goto_with_auth_checks(
+                "https://www.linkedin.com/in/testuser/"
+            )
+
+        mock_page.goto.assert_awaited_once_with(
+            "https://www.linkedin.com/in/testuser/", wait_until="domcontentloaded"
+        )
+
     async def test_goto_with_auth_checks_clicks_remember_me_and_retries(
         self, mock_page
     ):

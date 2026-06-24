@@ -814,7 +814,7 @@ class LinkedInExtractor:
                 extra={"target_url": url, "wait_until": wait_until},
             )
             try:
-                await self._page.goto(url, wait_until=wait_until, timeout=30000)
+                await self._page.goto(url, wait_until=wait_until)
                 await stabilize_navigation(f"goto {url}", logger)
                 await record_page_trace(
                     self._page,
